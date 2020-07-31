@@ -9,21 +9,15 @@ const NavigationBar = () => {
     <Navbar bg="dark" variant="dark">
       <Navbar.Brand href="#home">Navbar</Navbar.Brand>
       <Nav className="mr-auto">
-        <Nav.Link>
-          <Link to={ROUTES.SIGN_IN}>Sign In</Link>
-        </Nav.Link>
-        <Nav.Link>
-          <Link to={ROUTES.LANDING}>Landing</Link>
-        </Nav.Link>
-        <Nav.Link>
-          <Link to={ROUTES.HOME}>Home</Link>
-        </Nav.Link>
-        <Nav.Link>
-          <Link to={ROUTES.ACCOUNT}>Account</Link>
-        </Nav.Link>
-        <Nav.Link>
-          <Link to={ROUTES.ADMIN}>Admin</Link>
-        </Nav.Link>
+        <Link to={ROUTES.SIGN_IN}>Sign In</Link>
+
+        <Link to={ROUTES.LANDING}>Landing</Link>
+
+        <Link to={ROUTES.HOME}>Home</Link>
+
+        <Link to={ROUTES.SIGN_UP}>Sign Up</Link>
+
+        <Link to={ROUTES.ADMIN}>Admin</Link>
       </Nav>
       <Form inline>
         <FormControl type="text" placeholder="Search" className="mr-sm-2" />
