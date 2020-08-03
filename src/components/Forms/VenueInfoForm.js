@@ -1,8 +1,10 @@
 import React from "react";
+// import "VenueInfoForm.css";
+
 import { Form, Card } from "react-bootstrap";
 import { FaInstagram, FaFacebook } from "react-icons/fa";
 
-const CustomForm = () => {
+const VenueInfoForm = () => {
   return (
     <Card className="form-card">
       <Form>
@@ -60,4 +62,4 @@ const CustomForm = () => {
   );
 };
 
-export default CustomForm;
+export default VenueInfoForm;
