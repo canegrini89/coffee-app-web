@@ -4,7 +4,6 @@ import { compose } from "recompose";
 
 import { withFirebase } from "../Firebase";
 import * as ROUTES from "../../constants/routes";
-import * as ROLES from "../../constants/roles";
 
 const SignUpPage = () => (
   <div>
@@ -24,26 +23,17 @@ const ERROR_MSG_ACCOUNT_EXISTS = `
 `;
 
 const SignUpFormBase = ({ firebase, history }) => {
-  const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [passwordOne, setPasswordOne] = useState("");
   const [passwordTwo, setPasswordTwo] = useState("");
-  const [isAdmin, setIsAdmin] = useState(false);
   const [error, setError] = useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const roles = {};
-
-    if (isAdmin) {
-      roles[ROLES.ADMIN] = ROLES.ADMIN;
-    }
-
     try {
       await firebase.handleCreateUserWithEmailAndPassword(email, passwordOne);
-      history.push(ROUTES.HOME);
-      console.log(firebase.auth().currentUser.emailVerified);
+      history.push(ROUTES.ADMIN);
     } catch (error) {
       if (error.code === ERROR_CODE_ACCOUNT_EXISTS) {
         error.message = ERROR_MSG_ACCOUNT_EXISTS;
@@ -53,20 +43,10 @@ const SignUpFormBase = ({ firebase, history }) => {
   };
 
   const isInvalid =
-    passwordOne !== passwordTwo ||
-    passwordOne === "" ||
-    email === "" ||
-    userName === "";
+    passwordOne !== passwordTwo || passwordOne === "" || email === "";
 
   return (
     <form onSubmit={handleSubmit}>
-      <input
-        name="userName"
-        value={userName}
-        onChange={(e) => setUserName(e.target.value)}
-        type="text"
-        placeholder="Full Name"
-      />
       <input
         name="email"
         value={email}
@@ -88,15 +68,6 @@ const SignUpFormBase = ({ firebase, history }) => {
         type="password"
         placeholder="Confirm Password"
       />
-      <label>
-        Admin:
-        <input
-          name="isAdmin"
-          type="checkbox"
-          checked={isAdmin}
-          onChange={(e) => setIsAdmin(e.target.checked)}
-        />
-      </label>
       <button disabled={isInvalid} type="submit">
         Sign Up
       </button>

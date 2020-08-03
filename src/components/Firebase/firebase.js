@@ -14,12 +14,11 @@ const config = {
 };
 
 const FirebaseProvider = ({ children }) => {
-  app.initializeApp(config);
+  if (!app.apps.length) {
+    app.initializeApp(config);
+  }
 
   /* Helper */
-
-  const serverValue = app.database.ServerValue;
-  const emailAuthProvider = app.auth.EmailAuthProvider;
 
   /* Firebase APIs */
 
@@ -46,43 +45,28 @@ const FirebaseProvider = ({ children }) => {
   const handleAuthUserListener = (next, fallback) =>
     auth.onAuthStateChanged((authUser) => {
       if (authUser) {
-        console.log(authUser);
-        //   db.collection("users").doc(authUser.uid).update({
-        //     email: authUser.email,
-        //     password: authUser.password
-        //   })
-        // .then(function(docRef) {
-        //     console.log("Document written with ID: ", docRef.id);
-        // })
-        // .catch(function(error) {
-        //     console.error("Error adding document: ", error);
-        // });
+        db.collection("venues")
+          .doc(authUser.uid)
+          .set({
+            email: authUser.email,
+            id: authUser.uid,
+          })
+          .then(function () {
+            next(authUser);
+          })
+          .catch(function (error) {
+            console.error("Error adding document: ", error);
+          });
       } else {
         fallback();
       }
     });
 
-  // *** User API ***
-
-  const user = (uid) => db.ref(`users/${uid}`);
-
-  // const users = () => db.ref("users");
-
-  //   // *** Message API ***
-
-  //   message = uid => this.db.ref(`messages/${uid}`);
-
-  //   messages = () => this.db.ref('messages');
-
   return (
     <FirebaseContext.Provider
       value={{
-        serverValue,
-        emailAuthProvider,
         auth,
         db,
-        // user,
-        // users,
         handleAuthUserListener,
         handleCreateUserWithEmailAndPassword,
         handleSignInWithEmailAndPassword,

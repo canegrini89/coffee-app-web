@@ -1,5 +1,5 @@
 import React from "react";
-// import "VenueInfoForm.css";
+import "./VenueInfoForm.css";
 
 import { Form, Card } from "react-bootstrap";
 import { FaInstagram, FaFacebook } from "react-icons/fa";

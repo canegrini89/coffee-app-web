@@ -25,7 +25,7 @@ const SignInFormBase = ({ firebase, history }) => {
     event.preventDefault();
     try {
       await firebase.handleSignInWithEmailAndPassword(email, password);
-      history.push(ROUTES.HOME);
+      history.push(ROUTES.ADMIN);
     } catch (error) {
       setError(error);
     }
