@@ -1,5 +1,31 @@
 .form-card {
   width: 80%;
   padding: 2rem;
-  box-shadow: #c1c1c1 1px 1px 2px 1px;
+  box-shadow: #c1c1c1 1px 1px 3px 2px;
+  margin: 2rem 0;
+}
+
+.ranking-container {
+  margin: 3rem 0.3rem;
+  padding: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: yellowgreen 2px solid;
+  box-shadow: yellowgreen 1px 1px 4px 1px;
+  background-color: rgba(25, 180, 25, 0.1);
+  border-radius: 10px;
+}
+
+.ranking-text {
+  font-size: large;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.ranking-stars {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
