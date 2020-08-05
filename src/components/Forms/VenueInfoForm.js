@@ -79,8 +79,6 @@ const VenueInfoForm = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: "100%",
-          width: "100%",
         }}
       >
         <Spinner animation="border" size="lg" />
