@@ -1,15 +1,19 @@
 import React, { useState, useRef } from "react";
 import "./VenueInfoForm.css";
-import { Form, Card, Button } from "react-bootstrap";
+import { Form, Card, Button, Spinner } from "react-bootstrap";
 import { FaInstagram, FaFacebook, FaStar } from "react-icons/fa";
 import firebase from "firebase";
 
 import FileUpload from "../FileUpload/FileUpload";
 import { textFormated } from "../../utils";
+import { useHistory } from "react-router-dom";
 
 const VenueInfoForm = () => {
+  const history = useHistory();
+
   const [updateValue, setUpdateValue] = useState(0);
   const [picture, setPicture] = useState("");
+  const [loadingImage, setLoadingImage] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const name = useRef(null);
@@ -19,7 +23,7 @@ const VenueInfoForm = () => {
 
   const handleUpload = (event) => {
     const file = event.target.files[0];
-    const storageRef = firebase.storage().ref(`/venue/images/${file.name}`);
+    const storageRef = firebase.storage().ref(`/venue/images/${file.id}`);
     const task = storageRef.put(file);
 
     task.on(
@@ -29,7 +33,7 @@ const VenueInfoForm = () => {
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100
         );
         setUpdateValue(percentage);
-        setLoading(true);
+        setLoadingImage(true);
       },
       (error) => {
         console.log(error);
@@ -38,13 +42,14 @@ const VenueInfoForm = () => {
         task.snapshot.ref.getDownloadURL().then((filePath) => {
           setPicture(filePath);
           setUpdateValue(100);
-          setLoading(false);
+          setLoadingImage(false);
         });
       }
     );
   };
 
   const handleSubmit = (e) => {
+    setLoading(true);
     e.preventDefault();
     const venueData = {
       name: textFormated(name.current.value),
@@ -59,19 +64,44 @@ const VenueInfoForm = () => {
       .firestore()
       .collection("venues")
       .doc(`${venueData.name}`)
-      .set(venueData);
+      .set(venueData)
+      .then((venue) => {
+        setLoading(false);
+        history.push("/account");
+      })
+      .catch((error) => console.log(error));
   };
+
+  if (loading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Spinner animation="border" size="lg" />
+      </div>
+    );
+  }
 
   return (
     <Card className="form-card">
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="name">
           <Form.Label>Venue Name</Form.Label>
-          <Form.Control type="text" placeholder="Enter the name" ref={name} />
+          <Form.Control
+            type="text"
+            placeholder="Enter the name"
+            ref={name}
+            required
+          />
         </Form.Group>
         <Form.Group controlId="description">
           <Form.Label>Venue Description</Form.Label>
           <Form.Control
+            required
             type="text"
             as="textarea"
             placeholder="Enter a brief description of your brand"
@@ -81,7 +111,7 @@ const VenueInfoForm = () => {
         <FileUpload
           updateValue={updateValue}
           picture={picture}
-          loading={loading}
+          loading={loadingImage}
           onUpload={handleUpload}
         />
         <div className="ranking-container">

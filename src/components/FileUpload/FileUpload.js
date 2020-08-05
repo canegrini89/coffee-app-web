@@ -6,7 +6,7 @@ import "./FileUpload.css";
 const FileUpload = ({ updateValue, onUpload, picture, loading }) => {
   return (
     <>
-      <h2 className="file-upload-text">Upload a picture of your venue</h2>
+      <h3 className="file-upload-text">Upload a picture of your venue</h3>
       {loading ? (
         <ProgressBar now={updateValue} label={`${updateValue}%`} />
       ) : (
